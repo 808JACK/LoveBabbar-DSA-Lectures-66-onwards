@@ -27,14 +27,14 @@ public class MinAndMax {
     return root;
   }
 
-  public static Node insertToBst(Node root, int data) {
+  public static Node insertToBst(Node root, int d) {
     if (root == null) {
-      return new Node(data);
+      return new Node(d);
     }
-    if (data > root.data) {
-      root.right = insertToBst(root.right, data);
-    } else if (data < root.data) {
-      root.left = insertToBst(root.left, data);
+    if (d > root.data) {
+      root.right = insertToBst(root.right, d);
+    } else if (d < root.data) {
+      root.left = insertToBst(root.left, d);
     }
     return root;
   }
