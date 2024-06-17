@@ -1,92 +1,89 @@
-// this code to delete the Node in BST
-public static class Deletation {
-  
-  public static class Node{
-  int data;
-  Node left,right;
-    
-  Node(int d){
+import java.util.Scanner;
 
-    this.data = d;
-    this.right = this.left = null;
-  }
-}
-public static Node takeInput(Node root){
+public class Deletion {
 
-  Scanner sc = new Scanner(System.in);
-  while(true){
-    
-    int data  = sc.nextInt();
-    if(data == -1){
-      break;
+    public static class Node {
+        int data;
+        Node left, right;
+
+        Node(int d) {
+            this.data = d;
+            this.right = this.left = null;
+        }
     }
-    root = insertToBst(root,data);
-  }
-  
-  sc.close();
-  return root;
-  }
 
-  public static Node insertToBst(Node root,int d){
-
-    if(root == null){
-
-        root = new Node(d);
+    public static Node takeInput(Node root) {
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            int data = sc.nextInt();
+            if (data == -1) {
+                break;
+            }
+            root = insertToBst(root, data);
+        }
+        sc.close();
         return root;
     }
-    if(d > root.data){
-      root.right = insertToBst(root.right,d);
-    }
-    if(d < root.data){
-      root.left = insertToBst(root.left,d);
-    }
-    return root;
-  }
-  
-  public static Node deleteNode(Node root, int value){
 
-    if(root == null){
-      return root;
+    public static Node insertToBst(Node root, int d) {
+        if (root == null) {
+            root = new Node(d);
+            return root;
+        }
+        if (d > root.data) {
+            root.right = insertToBst(root.right, d);
+        } else if (d < root.data) {
+            root.left = insertToBst(root.left, d);
+        }
+        return root;
     }
 
-    if(value < root.data){
-      root.left = deleteNode(root.left , value);
-    }
-    else if(value > root.data){
-      root.right = deleteNode(root.right,value);
-    }
-    else{
+    public static Node deleteNode(Node root, int value) {
+        if (root == null) {
+            return root;
+        }
 
-      //case 1: Node has no children 
-
-      if(root.left == null && root.right == null){
-        return null;
-      }
-
-      //case 2:Node has one child
-      if (root.left == null) {
+        if (value < root.data) {
+            root.left = deleteNode(root.left, value);
+        } else if (value > root.data) {
+            root.right = deleteNode(root.right, value);
+        } else {
+            // Node with only one child or no child
+            if (root.left == null) {
                 return root.right;
             } else if (root.right == null) {
                 return root.left;
-      }
+            }
 
-      // case 3: Node has two childrens
+            // Node with two children: Get the inorder predecessor (max in the left subtree)
+            Node temp = maxValueNode(root.left);
 
-      // inorder pred
-      root.data = maxValue(root.left);
-      
-      // Delete the in-order predecessor
-      root.left = deleteNode(root.left,root.data);
+            // Copy the inorder predecessor's content to this node
+            root.data = temp.data;
 
+            // Delete the inorder predecessor
+            root.left = deleteNode(root.left, temp.data);
+        }
+
+        return root;
     }
 
-    return root;
-}
-public static int maxValue(Node root) {
-        int maxval = root.data;
-        while (root.right != null) {
-            maxval = root.right.data;
-            root = root.right;
+    public static Node maxValueNode(Node root) {
+        Node current = root;
+        while (current.right != null) {
+            current = current.right;
         }
-        return maxval;
+        return current;
+    }
+
+    public static void main(String[] args) {
+        Node root = null;
+        root = takeInput(root);
+
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter value to delete: ");
+        int value = sc.nextInt();
+        root = deleteNode(root, value);
+        sc.close();
+    }
 }
